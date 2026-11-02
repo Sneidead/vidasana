@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VidaSana - Prototipo</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<header>
+  <div class="nav">
+    <div class="logo" onclick="go('home')">
+      <svg viewBox="0 0 32 32" fill="none" stroke="#0F766E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M16 28C8 22 4 17 4 12a6 6 0 0 1 12-2 6 6 0 0 1 12 2c0 5-4 10-12 16z"/></svg>
+      VidaSana
+    </div>
+    <nav class="menu" id="menu">
+      <a data-s="home" onclick="go('home')">Inicio</a>
+      <a data-s="search" onclick="go('search')">Explorar</a>
+      <a data-s="favs" onclick="go('favs')">Favoritos</a>
+      <a data-s="habits" onclick="go('habits')">Mis hábitos</a>
+      <a data-s="profile" onclick="go('profile')">Perfil de salud</a>
+    </nav>
+    <button class="btn" id="btnAuth" onclick="go('auth')">Ingresar</button>
+    <button class="burger" onclick="document.getElementById('menu').classList.toggle('open')" aria-label="Menú">&#9776;</button>
+  </div>
+</header>
+
+<main>
+<!-- INICIO -->
+<section class="screen" id="s-home">
+  <div class="hero">
+    <div>
+      <h1>Pequeños hábitos,<br>grandes cambios</h1>
+      <p>Recomendaciones de alimentación, actividad física, descanso y bienestar pensadas para ti.</p>
+      <div class="searchbox">
+        <input id="heroQ" type="text" placeholder="Busca: desayuno, caminar, dormir mejor...">
+        <button class="btn" onclick="heroSearch()">Buscar</button>
+      </div>
+    </div>
+    <div class="art" aria-hidden="true">
+      <i style="background:#F59E0B"></i><i style="background:#16A34A"></i>
+      <i style="background:#6366F1"></i><i style="background:#EC4899"></i>
+    </div>
+  </div>
+
+  <h2>Categorías</h2>
+  <div class="cats" id="catsHome"></div>
+
+  <h2 id="paraTitulo">Recomendado para ti</h2>
+  <div class="grid" id="paraTi"></div>
+  <p class="note" id="paraNota"></p>
+
+  <h2>Lo más popular</h2>
+  <div class="grid" id="popular"></div>
+</section>
+
+<!-- BUSCAR -->
+<section class="screen" id="s-search">
+  <h1 style="font-size:26px;margin-bottom:14px">Explorar recomendaciones</h1>
+  <div class="filters">
+    <input type="text" id="q" placeholder="Buscar por palabra clave..." oninput="renderSearch()">
+    <select id="fNivel" onchange="renderSearch()">
+      <option value="">Cualquier nivel</option><option>Fácil</option><option>Medio</option><option>Avanzado</option>
+    </select>
+    <select id="fTiempo" onchange="renderSearch()">
+      <option value="">Cualquier duración</option><option value="10">Hasta 10 min</option><option value="30">Hasta 30 min</option>
+    </select>
+    <select id="fOrden" onchange="renderSearch()">
+      <option value="pop">Más populares</option><option value="az">A - Z</option>
+    </select>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px" id="chips"></div>
+  <p class="meta" id="cuenta" style="margin-bottom:10px"></p>
+  <div class="grid" id="resultados"></div>
+</section>
+
+<!-- DETALLE -->
+<section class="screen" id="s-detail">
+  <button class="back" onclick="go(prev)">&larr; Volver</button>
+  <div id="detalle"></div>
+</section>
+
+<!-- FAVORITOS -->
+<section class="screen" id="s-favs">
+  <h1 style="font-size:26px;margin-bottom:14px">Mis favoritos</h1>
+  <div class="grid" id="favGrid"></div>
+</section>
+
+<!-- HABITOS -->
+<section class="screen" id="s-habits">
+  <h1 style="font-size:26px;margin-bottom:14px">Seguimiento de hábitos</h1>
+  <div class="two">
+    <div>
+      <h2 style="margin-top:0">Esta semana</h2>
+      <div id="habList"></div>
+      <button class="btn sec" onclick="addHabit()">+ Agregar hábito</button>
+    </div>
+    <div class="panel">
+      <h2 style="margin-top:0">Tu progreso</h2>
+      <p class="meta">Cumplimiento semanal</p>
+      <div class="bar"><i id="barra"></i></div>
+      <p id="progTxt" style="font-weight:bold"></p>
+      <div class="aviso">Tip: empieza con 2 o 3 hábitos y sube poco a poco.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PERFIL -->
+<section class="screen" id="s-profile">
+  <h1 style="font-size:26px;margin-bottom:14px">Mi perfil de salud</h1>
+  <div class="two">
+    <div class="panel">
+      <label>Nombre</label><input class="inp" id="pNombre" placeholder="Tu nombre">
+      <label>Edad</label><input class="inp" id="pEdad" type="number" min="10" max="100" placeholder="Años">
+      <div class="two" style="gap:12px">
+        <div><label>Peso (kg)</label><input class="inp" id="pPeso" type="number" placeholder="kg"></div>
+        <div><label>Estatura (cm)</label><input class="inp" id="pAltura" type="number" placeholder="cm"></div>
+      </div>
+      <label>Objetivo principal</label>
+      <select class="inp" id="pObj">
+        <option value="">Selecciona...</option>
+        <option value="ali">Comer mejor</option>
+        <option value="act">Moverme más</option>
+        <option value="des">Dormir mejor</option>
+        <option value="bien">Reducir el estrés</option>
+      </select>
+      <label>Preferencia alimentaria</label>
+      <select class="inp" id="pDieta"><option>Sin restricciones</option><option>Vegetariana</option><option>Sin lactosa</option><option>Sin gluten</option></select>
+      <label>Nivel de actividad</label>
+      <select class="inp" id="pNivel"><option>Bajo</option><option>Medio</option><option>Alto</option></select>
+      <br><button class="btn" onclick="saveProfile()">Guardar perfil</button>
+    </div>
+    <div class="panel">
+      <h2 style="margin-top:0">Resumen</h2>
+      <p class="meta">IMC estimado</p>
+      <p style="font-size:34px;font-weight:bold;color:var(--verde)" id="imc">--</p>
+      <p id="imcTxt" class="meta"></p>
+      <div class="aviso">Esta información es orientativa y no reemplaza la consulta con un profesional de la salud. Tus datos son privados y puedes borrarlos cuando quieras.</div>
+      <br><button class="btn sec" onclick="clearProfile()">Borrar mis datos</button>
+    </div>
+  </div>
+</section>
+
+<!-- AUTH -->
+<section class="screen" id="s-auth">
+  <div class="panel authbox">
+    <div class="tabs">
+      <button id="tLogin" class="on" onclick="authTab('login')">Iniciar sesión</button>
+      <button id="tReg" onclick="authTab('reg')">Registrarse</button>
+    </div>
+    <div id="regOnly" style="display:none"><label>Nombre</label><input class="inp" id="aNombre" placeholder="Tu nombre"></div>
+    <label>Correo electrónico</label><input class="inp" id="aMail" type="email" placeholder="correo@ejemplo.com">
+    <label>Contraseña</label><input class="inp" id="aPass" type="password" placeholder="Mínimo 8 caracteres">
+    <div id="regCheck" style="display:none;margin-top:10px"><label style="font-weight:normal"><input type="checkbox" id="aTerm"> Acepto la política de privacidad y el tratamiento de mis datos de salud</label></div>
+    <br><button class="btn" style="width:100%" onclick="doAuth()" id="authBtn">Entrar</button>
+    <p class="note" id="authErr" style="color:#B91C1C"></p>
+    <p class="note">Prototipo: cualquier correo válido y contraseña de 8 o más caracteres funcionan.</p>
+  </div>
+</section>
+</main>
+
+<footer>VidaSana &middot; Prototipo académico &middot; CUN Digital &middot; Ingeniería Web</footer>
+<div class="toast" id="toast"></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
